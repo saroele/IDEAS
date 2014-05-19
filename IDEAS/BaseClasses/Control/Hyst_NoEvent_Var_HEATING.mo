@@ -18,8 +18,8 @@ block Hyst_NoEvent_Var_HEATING
     annotation (Placement(transformation(extent={{-88,10},{-68,30}}),
         iconTransformation(extent={{-88,10},{-68,30}})));
 
-initial equation
-  y=0;
+//initial equation
+//  y=0;
 
 equation
   if noEvent(u<uLow) then
