@@ -1,7 +1,6 @@
 within IDEAS;
 model SimInfoManager
   "Simulation information manager for handling time and climate data required in each for simulation."
-
   replaceable parameter IDEAS.Climate.Meteo.Detail detail
     "Timeframe detail of the climate data"   annotation (choicesAllMatching = true,Dialog(group="Climate"));
   replaceable parameter IDEAS.Climate.Meteo.location city
@@ -9,26 +8,22 @@ model SimInfoManager
   parameter Boolean occBeh = false
     "put to true if  user behaviour is to be read from files"
                                          annotation(Dialog(group="User behaviour"));
-
   parameter Boolean DHW = false
     "put to true if domestic how water (DHW) consumption is to be read from files"
                                          annotation(Dialog(group="User behaviour"));
   parameter Boolean PV = false
     "put to true if photovoltaics is to be read from files "
                                          annotation(Dialog(group="Photovoltaics"));
-
   replaceable parameter IDEAS.Occupants.Extern.Interfaces.Occ_Files occupants
     "Specifies the files with occupant behavior" annotation(choicesAllMatching = true,Dialog(group="User behaviour"));
   parameter Integer nOcc = 33 "Number of occupant profiles to be read" annotation(Dialog(group="User behaviour"));
-
   parameter String fileNamePv = "onePVpanel10min"
     "Filename for photvoltaic profiles"                                                         annotation(Dialog(group="Photovoltaics"));
   parameter Integer nPV = 33 "Number of photovoltaic profiles" annotation(Dialog(group="Photovoltaics"));
   parameter Integer PNom = 1000
     "Nominal power (W) of the photovoltaic profiles"                             annotation(Dialog(group="Photovoltaics"));
-
 protected
-  final parameter String filNamClim = "..\\Inputs\\" + city.locNam + detail.filNam;
+  final parameter String filNamClim = "../Inputs/" + city.locNam + detail.filNam;
   final parameter Modelica.SIunits.Angle lat(displayUnit="deg") = city.lat
     "latitude of the locatioin";
   final parameter Modelica.SIunits.Angle lon(displayUnit="deg") = city.lon;
@@ -41,10 +36,8 @@ protected
   final parameter Boolean DST = city.DST
     "boolean to take into account daylight saving time";
   final parameter Integer yr = city.yr "depcited year for DST only";
-
   final parameter Boolean BesTest = Modelica.Utilities.Strings.isEqual(city.locNam,"BesTest")
     "boolean to determine if this simulation is a BESTEST simulation";
-
 public
   Modelica.SIunits.Irradiance solDirPer = climate_solar.y[3]
     "direct irradiation on normal to solar zenith";
@@ -64,13 +57,10 @@ public
   Real Fc "cloud factor";
   Modelica.SIunits.Irradiance irr = climate_solar.y[1];
   Boolean summer = timMan.summer;
-
   Boolean day = true;
-
   Modelica.SIunits.Time timLoc = timMan.timLoc "Local time";
   Modelica.SIunits.Time timSol = timMan.timSol "Solar time";
   Modelica.SIunits.Time timCal = timMan.timCal "Calendar time";
-
 protected
   IDEAS.Climate.Time.SimTimes timMan(
     delay=detail.timestep/2,
@@ -86,20 +76,19 @@ protected
     final tableOnFile=true, final tableName="data",final fileName=filNamClim, final columns = {7,11,14},
     final smoothness=Modelica.Blocks.Types.Smoothness.LinearSegments)
     annotation (Placement(transformation(extent={{-40,46},{-26,60}})));
-
 public
 Modelica.Blocks.Tables.CombiTable1Ds tabQCon(
     final smoothness = Modelica.Blocks.Types.Smoothness.LinearSegments,
     tableOnFile = true,
     tableName = "data",
-    fileName = "..\\Inputs\\" + occupants.filQCon,
+    fileName = "../Inputs/" + occupants.filQCon,
     columns=2:nOcc+1) if occBeh annotation (Placement(transformation(extent={{-40,-34},
             {-26,-20}})));
 Modelica.Blocks.Tables.CombiTable1Ds tabQRad(
     final smoothness = Modelica.Blocks.Types.Smoothness.LinearSegments,
     tableOnFile = true,
     tableName = "data",
-    fileName = "..\\Inputs\\" + occupants.filQRad,
+    fileName = "../Inputs/" + occupants.filQRad,
     columns=2:nOcc+1) if occBeh annotation (Placement(transformation(extent={{-36,-38},
             {-22,-24}})));
 Modelica.Blocks.Sources.CombiTimeTable
@@ -107,21 +96,21 @@ Modelica.Blocks.Sources.CombiTimeTable
     final smoothness = Modelica.Blocks.Types.Smoothness.LinearSegments,
     tableOnFile = true,
     tableName = "data",
-    fileName = "..\\Inputs\\" + occupants.filPres,
+    fileName = "../Inputs/" + occupants.filPres,
     columns=2:nOcc+1) if occBeh annotation (Placement(transformation(extent={{0,-34},
             {14,-20}})));
 Modelica.Blocks.Tables.CombiTable1Ds tabP(
     final smoothness = Modelica.Blocks.Types.Smoothness.LinearSegments,
     tableOnFile = true,
     tableName = "data",
-    fileName = "..\\Inputs\\" + occupants.filP,
+    fileName = "../Inputs/" + occupants.filP,
     columns=2:nOcc+1) if occBeh annotation (Placement(transformation(extent={{-40,-58},
             {-26,-44}})));
 Modelica.Blocks.Tables.CombiTable1Ds tabQ(
     final smoothness = Modelica.Blocks.Types.Smoothness.LinearSegments,
     tableOnFile = true,
     tableName = "data",
-    fileName = "..\\Inputs\\" + occupants.filQ,
+    fileName = "../Inputs/" + occupants.filQ,
     columns=2:nOcc+1) if occBeh annotation (Placement(transformation(extent={{-36,-62},
             {-22,-48}})));
 Modelica.Blocks.Sources.CombiTimeTable
@@ -129,7 +118,7 @@ Modelica.Blocks.Sources.CombiTimeTable
     final smoothness=Modelica.Blocks.Types.Smoothness.LinearSegments,
     tableOnFile=true,
     tableName="data",
-    fileName="..\\Inputs\\" + occupants.filDHW,
+    fileName="../Inputs/" + occupants.filDHW,
     columns=2:nOcc+1) if DHW
                             annotation (Placement(transformation(extent={{0,-58},
             {14,-44}})));
@@ -137,11 +126,10 @@ Modelica.Blocks.Tables.CombiTable1Ds tabPPV(
     final smoothness=Modelica.Blocks.Types.Smoothness.LinearSegments,
     tableOnFile=true,
     tableName="data",
-    fileName="..\\Inputs\\" + fileNamePv,
+    fileName="../Inputs/" + fileNamePv,
     columns=2:nPV + 1) if
                          PV annotation (Placement(transformation(extent={{-36,2},
             {-22,16}})));
-
 equation
   if not BesTest then
     Tsky = Te - (23.8 - 0.2025 * (Te-273.15)*(1-0.87*Fc));
@@ -152,7 +140,6 @@ equation
     Fc = climate_nonSolar.y[3]*0.87;
     Va = climate_nonSolar.y[4];
   end if;
-
   connect(timMan.timCalSol, climate_solar.u) annotation (Line(
       points={{-60,62},{-52,62},{-52,53},{-41.4,53}},
       color={0,0,127},
