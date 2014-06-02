@@ -30,7 +30,7 @@ model EmbeddedPipe
   final parameter Real rey = m_flowMin * (FHChars.d_a - 2*FHChars.s_r) / (medium.nue * Modelica.Constants.pi / 4 * (FHChars.d_a - 2*FHChars.s_r)^2)
     "Fix Reynolds number for assert of turbulent flow";
   Real m_flowSp = flowPort_a.m_flow / FHChars.A_Floor "in kg/s.m2";
-  Real m_flowMinSp = m_flowMin / FHChars.A_Floor "in kg/s.m2";
+  parameter Real m_flowMinSp = m_flowMin / FHChars.A_Floor "in kg/s.m2";
   Modelica.SIunits.Velocity flowSpeed=flowPort_a.m_flow/medium.rho/(Modelica.Constants.pi
       /4*(FHChars.d_a - 2*FHChars.s_r)^2);
 
@@ -56,13 +56,16 @@ model EmbeddedPipe
         origin={-54,0})));
 
 // Equations and stuff ////////////////////////////////////////////////////////////////////////
+
+parameter Modelica.SIunits.ThermalInsulance R_w_min = FHChars.T^0.13/8/Modelica.Constants.pi * abs(((FHChars.d_a - 2*FHChars.s_r)/
+      (m_flowMinSp*L_r)))^0.87;
 initial equation
   assert(FHChars.S_1 > 0.3 * FHChars.T, "Thickness of the concrete or screed layer above the tubes is smaller than 0.3 * the tube interdistance. 
     The model is not valid for this case");
   assert(FHChars.S_2 > 0.3 * FHChars.T, "Thickness of the concrete or screed layer under the tubes is smaller than 0.3 * the tube interdistance. 
     The model is not valid for this case");
   assert(rey > 2700, "The minimal flowrate leads to laminar flow.  Adapt the model (specifically R_w) to these conditions");
-  assert(m_flowMinSp * medium.cp * (R_w + R_r + R_x) >= 0.5, "Model is not valid, division in n parts is required");
+  assert(m_flowMinSp * medium.cp * (R_w_min + R_r + R_x) >= 0.5, "Model is not valid, division in n parts is required");
 
 equation
 
