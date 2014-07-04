@@ -59,7 +59,7 @@ equation
       color={191,0,0},
       smooth=Smooth.None));
   connect(building.TSensor, heatingSystem.TSensor) annotation (Line(
-      points={{-35.4,-6},{-28,-6},{-28,-6},{-20.4,-6}},
+      points={{-35.4,-6},{-20.4,-6}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(building.TSensor, ventilationSystem.TSensor) annotation (Line(
@@ -72,7 +72,7 @@ equation
       color={85,170,255},
       smooth=Smooth.None));
   connect(heatingSystem.plugLoad, inHomeGrid.nodeSingle) annotation (Line(
-      points={{20,0},{26,0},{26,0},{32,0}},
+      points={{20,0},{32,0}},
       color={85,170,255},
       smooth=Smooth.None));
   connect(occupant.plugLoad, inHomeGrid.nodeSingle) annotation (Line(
