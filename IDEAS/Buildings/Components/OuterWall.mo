@@ -1,18 +1,15 @@
 within IDEAS.Buildings.Components;
 model OuterWall "Opaque building envelope construction"
-
   extends IDEAS.Buildings.Components.Interfaces.StateWall;
-
   replaceable Data.Constructions.CavityWall constructionType
-    constrainedby Data.Interfaces.Construction(final insulationType=
-        insulationType, final insulationTickness=insulationThickness)
+    constrainedby Data.Interfaces.Construction(insulationType=
+        insulationType, insulationTickness=insulationThickness)
     "Type of building construction" annotation (
     __Dymola_choicesAllMatching=true,
     Placement(transformation(extent={{-38,72},{-34,76}})),
     Dialog(group="Construction details"));
-
   replaceable Data.Insulation.Rockwool insulationType constrainedby
-    Data.Interfaces.Insulation(final d=insulationThickness)
+    Data.Interfaces.Insulation(d=insulationThickness)
     "Type of thermal insulation" annotation (
     __Dymola_choicesAllMatching=true,
     Placement(transformation(extent={{-38,84},{-34,88}})),
@@ -25,16 +22,13 @@ model OuterWall "Opaque building envelope construction"
     "Inclination of the wall, i.e. 90deg denotes vertical";
   parameter Modelica.SIunits.Angle azi
     "Azimuth of the wall, i.e. 0deg denotes South";
-
   final parameter Real U_value=1/(1/8 + sum(constructionType.mats.R) + 1/25)
     "Wall U-value";
   final parameter Modelica.SIunits.Power QNom=U_value*AWall*(273.15 + 21 - sim.Tdes)
     "Design heat losses at reference outdoor temperature";
-
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_emb
     "port for gains by embedded active layers"
     annotation (Placement(transformation(extent={{-10,-110},{10,-90}})));
-
   //protected
   IDEAS.Climate.Meteo.Solar.RadSol radSol(
     final inc=inc,
@@ -66,7 +60,6 @@ model OuterWall "Opaque building envelope construction"
         AWall, inc=inc)
     "determination of radiant heat exchange with the environment and sky"
     annotation (Placement(transformation(extent={{-20,-20},{-40,0}})));
-
 equation
   connect(radSol.solDir, solAbs.solDir) annotation (Line(
       points={{-50,-24},{-40,-24}},
@@ -100,7 +93,6 @@ equation
       points={{-10,-22},{-14,-22},{-14,-4},{-20,-4}},
       color={0,0,127},
       smooth=Smooth.None));
-
   connect(port_emb, layMul.port_gain) annotation (Line(
       points={{0,-100},{0,-40}},
       color={191,0,0},
@@ -128,7 +120,7 @@ equation
       index=1,
       extent={{6,3},{6,3}}));
   connect(layMul.area, propsBus_a.area) annotation (Line(
-      points={{0,-20},{0,-20},{0,40},{50,40}},
+      points={{0,-20},{0,40},{50,40}},
       color={0,0,127},
       smooth=Smooth.None), Text(
       string="%second",

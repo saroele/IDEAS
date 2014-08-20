@@ -1,20 +1,16 @@
 within IDEAS.Buildings.Components;
 model Window "Multipane window"
-
   extends IDEAS.Buildings.Components.Interfaces.StateWall;
-
   parameter Modelica.SIunits.Area A "Total window and windowframe area";
   parameter Real frac(
     min=0,
     max=1) = 0.15 "Area fraction of the window frame";
-
   parameter Modelica.SIunits.Angle inc
     "Inclination of the window, i.e. 90deg denotes vertical";
   parameter Modelica.SIunits.Angle azi
     "Azimuth of the wall, i.e. 0deg denotes South";
   final parameter Modelica.SIunits.Power QNom=glazing.U_value*A*(273.15 + 21 -
       sim.Tdes) "Design heat losses at reference outdoor temperature";
-
   replaceable parameter IDEAS.Buildings.Data.Interfaces.Glazing glazing
     constrainedby IDEAS.Buildings.Data.Interfaces.Glazing "Glazing type"
     annotation (__Dymola_choicesAllMatching=true, Dialog(group=
@@ -26,7 +22,6 @@ model Window "Multipane window"
   replaceable Interfaces.StateShading shaType constrainedby
     Interfaces.StateShading(final azi=azi) "Shading type" annotation (
       __Dymola_choicesAllMatching=true, Dialog(group="Construction details"));
-
   Modelica.Blocks.Interfaces.RealInput Ctrl if shaType.controled
     "Control signal between 0 and 1, i.e. 1 is fully closed" annotation (
       Placement(transformation(
@@ -44,7 +39,6 @@ model Window "Multipane window"
     "diffuse solar gains transmitted by windows" annotation (Placement(
         transformation(extent={{20,-110},{40,-90}}), iconTransformation(extent=
             {{20,-110},{40,-90}})));
-
 protected
   IDEAS.Climate.Meteo.Solar.ShadedRadSol radSol(
     final inc=inc,
@@ -78,7 +72,6 @@ protected
     final SwTransDif=glazing.SwTransDif,
     final SwAbsDif=glazing.SwAbsDif)
     annotation (Placement(transformation(extent={{-10,-70},{10,-50}})));
-
   IDEAS.Buildings.Components.BaseClasses.InteriorConvection iConFra(A=A*frac,
       inc=inc) if fraType.present
     "convective surface heat transimission on the interior side of the wall"
@@ -94,7 +87,6 @@ protected
   Modelica.Thermal.HeatTransfer.Components.ThermalConductor layFra(final G=
         fraType.U_value*A*frac) if fraType.present
     annotation (Placement(transformation(extent={{-10,70},{10,90}})));
-
 equation
   connect(eCon.port_a, layMul.port_a) annotation (Line(
       points={{-20,-30},{-10,-30}},
@@ -120,7 +112,6 @@ equation
       points={{-10,-22},{-14,-22},{-14,-4},{-20,-4}},
       color={0,0,127},
       smooth=Smooth.None));
-
   connect(layMul.port_b, surfRad_a) annotation (Line(
       points={{10,-30},{16,-30},{16,-60},{50,-60}},
       color={191,0,0},

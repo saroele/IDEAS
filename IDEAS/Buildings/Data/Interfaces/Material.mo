@@ -1,8 +1,6 @@
 within IDEAS.Buildings.Data.Interfaces;
 record Material "Properties of building materials"
-
   extends Modelica.Icons.MaterialProperty;
-
   parameter Modelica.SIunits.Length d=0 "Layer thickness";
   parameter Modelica.SIunits.ThermalConductivity k "Thermal conductivity";
   parameter Modelica.SIunits.SpecificHeatCapacity c "Specific thermal capacity";
@@ -12,14 +10,11 @@ record Material "Properties of building materials"
   parameter Boolean gas=false "Boolean wether the material is a gas";
   parameter Real mhu(unit="m2/s") = 0
     "Viscosity, i.e. if the material is a fluid";
-
   final parameter Real R=d/k;
-
   parameter Modelica.SIunits.Emissivity epsLw_a=0.84
     "Longwave emisivity for surface a if different";
   parameter Modelica.SIunits.Emissivity epsLw_b=0.84
     "Longwave emisivity for surface a if different";
-
   final parameter Modelica.SIunits.ThermalDiffusivity alpha=k/(c*rho)
     "Thermal diffusivity";
   final parameter Integer nStaRef=3
@@ -28,9 +23,9 @@ record Material "Properties of building materials"
     "d/sqrt(mat.alpha) of a reference case, ie. 20 cm dense concrete";
   final parameter Real piLay=d/sqrt(alpha)
     "d/sqrt(mat.alpha) of the depicted layer";
-  final parameter Integer nSta(min=1) = max(1, integer(ceil(nStaRef*piLay/piRef)))
+  final parameter Integer nSta(min=1) = 3
     "Actual number of state variables in material";
-
+                                          //max(1, integer(ceil(nStaRef*piLay/piRef)))
   annotation (Documentation(info="<html>
 <p><h4><font color=\"#008000\">General description</font></h4></p>
 <p><h5>Goal</h5></p>
