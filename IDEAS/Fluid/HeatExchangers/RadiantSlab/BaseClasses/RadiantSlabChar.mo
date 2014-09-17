@@ -26,7 +26,6 @@ record RadiantSlabChar
     "Thickness of the concrete/screed ABOVE the pipe layer";
   parameter Modelica.SIunits.Length S_2=0.1
     "Thickness of the concrete/screed UNDER the pipe layer";
-  parameter Modelica.SIunits.Area A_Floor=1 "Tabs floor surface, CHANGE THIS!!";
   parameter Modelica.SIunits.ThermalConductivity lambda_b=1.8
     "Thermal conductivity of the concrete or screed layer";
   parameter Modelica.SIunits.SpecificHeatCapacity c_b=840
@@ -35,6 +34,8 @@ record RadiantSlabChar
     "Density of the concrete/screed layer";
   constant Integer n1=3 "Number of discrete capacities in upper layer";
   constant Integer n2=3 "Number of discrete capacities in lower layer";
+
+  parameter Integer nParCir=1 "number of circuit in parallel";
 
   // Extra parameters for floor heating
   parameter Modelica.SIunits.ThermalConductivity lambda_i = 0.036

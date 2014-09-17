@@ -1,6 +1,9 @@
 within IDEAS.Fluid.HeatExchangers.Examples;
-model RadiatorWithMixingValve "Radiator circuit with a simplified boiler and thermal mixing valve"
+model RadiatorWithMixingValve
+  "Radiator circuit with a simplified boiler and thermal mixing valve"
+
   extends Modelica.Icons.Example;
+
   Fluid.Movers.Pump volumeFlow1(
     m=4,
     T_start=313.15,
@@ -18,6 +21,8 @@ model RadiatorWithMixingValve "Radiator circuit with a simplified boiler and the
     QNom=5000,
     redeclare package Medium = Medium) "Hydraulic radiator model"
     annotation (Placement(transformation(extent={{52,-10},{72,10}})));
+  inner IDEAS.SimInfoManager sim
+    annotation (Placement(transformation(extent={{-84,68},{-64,88}})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature
     prescribedTemperature
     annotation (Placement(transformation(extent={{30,52},{50,72}})));
@@ -28,7 +33,8 @@ model RadiatorWithMixingValve "Radiator circuit with a simplified boiler and the
     annotation (Placement(transformation(extent={{-8,52},{12,72}})));
   Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedHeatFlow(T=333.15)
     annotation (Placement(transformation(extent={{-50,-52},{-30,-32}})));
-  Fluid.Valves.Thermostatic3WayValve thermostaticValve(mFlowMin=0.01,
+
+  Fluid.Valves.Thermostatic3WayValve thermostaticValve(
       redeclare package Medium = Medium,
     m_flow_nominal=m_flow_nominal)
     annotation (Placement(transformation(extent={{10,-16},{30,4}})));
@@ -41,8 +47,8 @@ model RadiatorWithMixingValve "Radiator circuit with a simplified boiler and the
         origin={50,-38})));
   package Medium = Modelica.Media.Water.ConstantPropertyLiquidWater;
   parameter SI.MassFlowRate m_flow_nominal=0.07 "Nominal mass flow rate";
-  inner SimInfoManager sim annotation (Placement(transformation(extent={{-94,78},{-74,98}})));
 equation
+
   connect(step.y, prescribedTemperature.T) annotation (Line(
       points={{13,62},{28,62}},
       color={0,0,127},
