@@ -1,9 +1,7 @@
 within IDEAS.Controls.Control_fixme;
 block rem_NoEvent
   "Timer measuring the time from the time instant where the Boolean input became true"
-
   parameter Modelica.SIunits.Time interval;
-
   extends Modelica.Blocks.Interfaces.partialBooleanBlockIcon;
   Modelica.Blocks.Interfaces.RealInput u "Connector of Boolean input signal"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}},
@@ -11,10 +9,8 @@ block rem_NoEvent
   Modelica.Blocks.Interfaces.RealOutput y "Connector of Real output signal"
     annotation (Placement(transformation(extent={{100,-10},{120,10}}, rotation=
             0)));
-
 algorithm
   y := (u/interval - noEvent(integer(u/interval)))*interval;
-
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=true, extent={{-100,-100},{100,
             100}}), graphics={Line(points={{-90,-70},{82,-70}}, color={192,192,

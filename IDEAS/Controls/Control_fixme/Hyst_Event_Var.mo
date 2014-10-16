@@ -1,6 +1,6 @@
 within IDEAS.Controls.Control_fixme;
-block Hyst_NoEvent_Var
-  "Hysteresis without events, with Real in- and output, and inputs for uLow and uHigh"
+block Hyst_Event_Var
+  "Hysteresis with events, with Real in- and output, and inputs for uLow and uHigh"
   extends Modelica.Blocks.Interfaces.SISO(y(start=0));
   parameter Boolean use_input = true;
   parameter Boolean enableRelease=false
@@ -35,9 +35,9 @@ equation
     uLow_internal = uLow_val;
     uHigh_internal = uHigh_val;
   end if;
-  if noEvent(u >= uHigh_internal and rel > 0.5) then
+  if u >= uHigh_internal and rel > 0.5 then
     y = 1;
-  elseif noEvent(u > uLow_internal and y > 0.5 and rel>0.5) then
+  elseif u > uLow_internal and y > 0.5 and rel>0.5 then
     y = 1;
   else
     y = 0;
@@ -152,4 +152,4 @@ Add possibility to use parameters as boundary values instead of inputs.
 </li>
 </ul>
 </html>"));
-end Hyst_NoEvent_Var;
+end Hyst_Event_Var;

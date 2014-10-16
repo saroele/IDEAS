@@ -138,7 +138,8 @@ public
     annotation (Placement(transformation(extent={{-20,-86},{0,-66}})));
 equation
   onOff.release = if noEvent(m_flowCondensor > 0) then 1.0 else 0.0;
-  QAsked = IDEAS.Utilities.Math.Functions.smoothMax(0, m_flowCondensor*(Medium.specificEnthalpy(Medium.setState_pTX(Medium.p_default,TCondensor_set, Medium.X_default)) -hIn), 10);
+  //QAsked = IDEAS.Utilities.Math.Functions.smoothMax(0, m_flowCondensor*(Medium.specificEnthalpy(Medium.setState_pTX(Medium.p_default,TCondensor_set, Medium.X_default)) -hIn), 10);
+  QAsked = m_flowCondensor*(Medium.specificEnthalpy(Medium.setState_pTX(Medium.p_default,TCondensor_set, Medium.X_default)) -hIn);
   P100.u1 = heatPort.T - 273.15;
   P100.u2 = TEvaporator - 273.15;
   P90.u1 = heatPort.T - 273.15;

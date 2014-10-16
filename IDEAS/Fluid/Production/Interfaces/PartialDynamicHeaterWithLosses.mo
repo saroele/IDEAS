@@ -11,10 +11,10 @@ model PartialDynamicHeaterWithLosses
   parameter Modelica.SIunits.Power QNom "Nominal power";
   Modelica.SIunits.Power PFuel "Fuel consumption in watt";
   parameter Modelica.SIunits.Time tauHeatLoss=7200
-    "Time constant of environmental heat losses";
-  parameter Modelica.SIunits.Mass mWater=5 "Mass of water in the condensor";
+    "Time constant of environmental heat losses" annotation(Evaluate=false);
+  parameter Modelica.SIunits.Mass mWater=5 "Mass of water in the condensor" annotation(Evaluate=false);
   parameter Modelica.SIunits.HeatCapacity cDry=4800
-    "Capacity of dry material lumped to condensor";
+    "Capacity of dry material lumped to condensor" annotation(Evaluate=false);
   final parameter Modelica.SIunits.ThermalConductance UALoss=(cDry + mWater*
       Medium.specificHeatCapacityCp(Medium.setState_pTX(Medium.p_default, Medium.T_default,Medium.X_default)))/tauHeatLoss;
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor mDry(C=cDry, T(start=
@@ -45,7 +45,7 @@ model PartialDynamicHeaterWithLosses
         rotation=-90,
         origin={-74,-100})));
   parameter SI.MassFlowRate m_flow_nominal "Nominal mass flow rate";
-  parameter SI.Pressure dp_nominal=0 "Pressure";
+  parameter SI.Pressure dp_nominal=0 "Pressure" annotation(Evaluate=false);
   IDEAS.Fluid.FixedResistances.Pipe_HeatPort pipe_HeatPort(
     redeclare package Medium = Medium,
     m_flow_nominal=m_flow_nominal,

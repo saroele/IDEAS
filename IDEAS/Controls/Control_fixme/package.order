@@ -8,3 +8,4 @@ Timer_NoEvents
 MinOnTimer_Events
 rem_NoEvent
 Hyst_NoEvent_MinOnOff
+Hyst_Event_Var

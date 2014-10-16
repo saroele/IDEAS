@@ -1,6 +1,5 @@
 within IDEAS.Fluid.Storage;
 model StorageTank "1D multinode stratified storage tank"
-
   replaceable package Medium = Modelica.Media.Interfaces.PartialMedium
     annotation (__Dymola_choicesAllMatching=true);
   //Tank geometry and composition
@@ -18,14 +17,11 @@ model StorageTank "1D multinode stratified storage tank"
   parameter Modelica.SIunits.Temperature[nbrNodes] T_start={293.15 for i in 1:
       nbrNodes} "Initial temperature of all Temperature states";
   parameter SI.MassFlowRate m_flow_nominal=0.1 "Nominal mass flow rate";
-
   /* 
   A validation excercise has shown that TO BE COMPLETED. //fixme
     */
-
   parameter Boolean preventNaturalDestratification=true
     "if true, this automatically increases the insulation of the top layer";
-
     //fixme: change to mixingvolumes?
   IDEAS.Fluid.FixedResistances.Pipe_HeatPort[nbrNodes] nodes(
     redeclare each package Medium=Medium,
@@ -51,7 +47,6 @@ model StorageTank "1D multinode stratified storage tank"
     "HeatPort for conduction between tank and environment" annotation (
       Placement(transformation(extent={{-10,70},{10,90}}), iconTransformation(
           extent={{44,-46},{56,-34}})));
-
   replaceable IDEAS.Fluid.Storage.BaseClasses.Buoyancy_powexp buoyancy(
     powBuo=24,
     nbrNodes=nbrNodes,
@@ -62,7 +57,6 @@ model StorageTank "1D multinode stratified storage tank"
     surCroSec=volumeTank/heightTank,
     h=heightTank)
     "buoyancy model to mix nodes in case of inversed temperature stratification";
-
   //fixme: documentation: only for liquids
 protected
   constant Medium.ThermodynamicState state_default = Medium.setState_pTX(Medium.p_default, Medium.T_default, Medium.X_default);
@@ -74,20 +68,20 @@ protected
         nbrNodes,
         preventNaturalDestratification))
     "Array of conduction loss components to the environment";
-
 public
   Modelica.Thermal.HeatTransfer.Components.ThermalConductor[nbrNodes - 1]
     conductionWater(each G=(volumeTank/heightTank)/(heightTank/nbrNodes)*Medium.thermalConductivity(state_default))
     "Conduction heat transfer between the layers";
-  Modelica.Blocks.Interfaces.RealOutput[nbrNodes] T=nodes.heatPort.T
+  Modelica.Blocks.Interfaces.RealOutput[nbrNodes] T(each final quantity="ThermodynamicTemperature",
+    each final unit="K",
+    each nominal = 300,
+    each displayUnit="degC")=nodes.heatPort.T
     annotation (Placement(transformation(extent={{70,-10},{90,10}}),
         iconTransformation(extent={{70,-10},{90,10}})));
-
 equation
   // Connection of upper and lower node to external ports
   connect(port_a, nodes[1].port_a);
   connect(port_b, nodes[nbrNodes].port_b);
-
   // Interconnection of nodes
   if nbrNodes > 1 then
     for i in 2:nbrNodes loop
@@ -96,17 +90,14 @@ equation
       connect(nodes[i].heatPort, conductionWater[i - 1].port_b);
     end for;
   end if;
-
   // Connection of environmental heat losses to the nodes
   connect(lossNodes.port_a, nodes.heatPort);
   for i in 1:nbrNodes loop
     connect(heatExchEnv, lossNodes[i].port_b);
   end for;
-
   // Connection of ports to the nodes
   connect(ports[1:end - 1], nodes.port_a);
   connect(ports[end], nodes[end].port_b);
-
   // Connection of buoyancy model
   connect(buoyancy.heatPort, nodes.heatPort);
   annotation (

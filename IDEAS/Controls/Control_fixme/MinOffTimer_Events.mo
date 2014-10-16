@@ -1,9 +1,7 @@
 within IDEAS.Controls.Control_fixme;
 block MinOffTimer_Events "MinOffTimer that works (and has events)"
   extends Modelica.Blocks.Interfaces.SISO(y(start=1));
-
   parameter Modelica.SIunits.Time duration=0;
-
   //protected
   output Modelica.SIunits.Time start(start=0);
 algorithm
@@ -23,5 +21,4 @@ algorithm
       start := 0;
     end when;
   end if;
-
 end MinOffTimer_Events;

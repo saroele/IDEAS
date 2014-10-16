@@ -1,9 +1,7 @@
 within IDEAS.Controls.Control_fixme;
 block MinOnTimer_Events "MinOnTimer that works (and has events)"
   extends Modelica.Blocks.Interfaces.SISO(y(start=0));
-
   parameter Modelica.SIunits.Time duration=0;
-
 protected
   Modelica.SIunits.Time start(start=0);
 algorithm
@@ -20,5 +18,4 @@ algorithm
       start := 0;
     end when;
   end if;
-
 end MinOnTimer_Events;

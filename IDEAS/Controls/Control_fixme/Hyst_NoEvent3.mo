@@ -1,15 +1,12 @@
 within IDEAS.Controls.Control_fixme;
 block Hyst_NoEvent3 "Hysteresis without events, with Real in- and output"
-
   extends Modelica.Blocks.Interfaces.partialBooleanBlockIcon;
   parameter Real uLow;
   parameter Real uHigh;
-
   Modelica.Blocks.Interfaces.RealInput u
     annotation (Placement(transformation(extent={{-128,-20},{-88,20}})));
   Modelica.Blocks.Interfaces.RealOutput y(start=0)
     annotation (Placement(transformation(extent={{96,-10},{116,10}})));
-
   output Real error;
 equation
   y = Hysteresis_NoEvent(

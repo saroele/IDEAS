@@ -1,11 +1,9 @@
 within IDEAS.Controls.Control_fixme;
 block Hyst_MinOff "Hysteresis, with Real in- and output and min off-time"
-
   extends Modelica.Blocks.Interfaces.partialBooleanBlockIcon;
   parameter Real uLow;
   parameter Real uHigh;
   parameter Modelica.SIunits.Time minOffTime=0;
-
   Modelica.Blocks.Interfaces.RealInput u
     annotation (Placement(transformation(extent={{-128,-20},{-88,20}})));
   Modelica.Blocks.Interfaces.RealOutput y
@@ -17,11 +15,9 @@ protected
     annotation (Placement(transformation(extent={{-2,-10},{18,10}})));
 public
   output Real error;
-
 algorithm
   error := hyst.error;
   y := min(hyst.y, timerOff.y);
-
 equation
   connect(u, hyst.u) annotation (Line(
       points={{-108,0},{-54.8,0}},

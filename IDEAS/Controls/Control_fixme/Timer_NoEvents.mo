@@ -1,6 +1,5 @@
 within IDEAS.Controls.Control_fixme;
 block Timer_NoEvents "Min-on OR min-off timer that does not generate events"
-
   /*
   
   Best version so far but still not working
@@ -31,11 +30,9 @@ block Timer_NoEvents "Min-on OR min-off timer that does not generate events"
   
   First implementation: RDC based on an idea of Ruben Baetens, 20110801
   */
-
   import IDEAS.Climate.Time.BaseClasses.TimerType;
   parameter TimerType timerType(start=TimerType.off) "Type of the timer";
   parameter Modelica.SIunits.Time duration "Duration of the timer";
-
   //protected
   constant Modelica.SIunits.Temperature TStart=300;
   constant Modelica.SIunits.Temperature TStep=100;
@@ -44,7 +41,6 @@ block Timer_NoEvents "Min-on OR min-off timer that does not generate events"
   parameter Modelica.SIunits.ThermalConductance GLow=C/duration;
   parameter Modelica.SIunits.HeatCapacity C=1e6;
   parameter Modelica.SIunits.Temperature TEnd=TStart + TStep*(1 - exp(-1));
-
   IDEAS.Thermal.Components.BaseClasses.VariableThermalConductor RVar
     annotation (Placement(transformation(extent={{-36,18},{-16,38}})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature TAmb
@@ -55,7 +51,6 @@ public
     der_T(fixed=false),
     T(fixed=true, start=TStart))
     annotation (Placement(transformation(extent={{4,46},{24,66}})));
-
 public
   Modelica.Blocks.Interfaces.RealInput u
     annotation (Placement(transformation(extent={{-126,-20},{-86,20}})));
@@ -70,7 +65,6 @@ algorithm
       RVar.G := 1e2*GLow;
       TAmb.T := TStart;
     end if;
-
   else
     if noEvent(u > 0.5 or y > 0.5) then
       RVar.G := GLow;
@@ -79,9 +73,7 @@ algorithm
       RVar.G := 1e2*GLow;
       TAmb.T := TStart;
     end if;
-
   end if;
-
 equation
   if timerType == TimerType.off then
     y = if noEvent(IDEAS.Controls.Control_fixme.Hysteresis_NoEvent(
@@ -98,7 +90,6 @@ equation
       TEnd) > 0.5 or der(cap.T) <= 0 or cap.T < (TStart + Modelica.Constants.small))
        then 0 else 1;
   end if;
-
   connect(RVar.port_b, cap.port) annotation (Line(
       points={{-16,28},{14,28},{14,46}},
       color={191,0,0},
