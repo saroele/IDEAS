@@ -8,7 +8,7 @@ model PartialDynamicHeaterWithLosses
   extends IDEAS.Fluid.Interfaces.LumpedVolumeDeclarations(T_start=293.15);
   parameter HeaterType heaterType
     "Type of the heater, is used mainly for post processing";
-  parameter Modelica.SIunits.Power QNom "Nominal power";
+  parameter Modelica.SIunits.Power QNom "Nominal power" annotation(Evaluate=false);
   Modelica.SIunits.Power PFuel "Fuel consumption in watt";
   parameter Modelica.SIunits.Time tauHeatLoss=7200
     "Time constant of environmental heat losses" annotation(Evaluate=false);
