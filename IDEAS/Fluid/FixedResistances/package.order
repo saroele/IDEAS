@@ -1,5 +1,6 @@
 FixedResistanceDpM
 LosslessPipe
+ParallelFixedResistanceDpM
 Pipe
 Pipe_HeatPort
 Pipe_Insulated
