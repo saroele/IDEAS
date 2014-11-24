@@ -79,18 +79,20 @@ public
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heatPort
     "heatPort connection to water in condensor"
     annotation (Placement(transformation(extent={{90,-10},{110,10}})));
-  Controls.Control_fixme.Hyst_NoEvent_Var onOff(
-    use_input=false,
-    uLow_val = modulationMin,
-    uHigh_val = modulationStart,
+  Controls.Discrete.Hyst_Var_Cooling      onOff(
     y(start = 0),
     enableRelease=true) "on-off, based on modulationInit"
     annotation (Placement(transformation(extent={{28,40},{48,60}})));
+  Modelica.Blocks.Sources.RealExpression realExpression(y=modulationInit)
+    annotation (Placement(transformation(extent={{-20,78},{0,98}})));
+  Modelica.Blocks.Sources.RealExpression realExpression1(y=modulationStart)
+    annotation (Placement(transformation(extent={{-20,54},{0,74}})));
+  Modelica.Blocks.Sources.RealExpression realExpression2(y=modulationMin)
+    annotation (Placement(transformation(extent={{-20,32},{0,52}})));
 equation
   assert(TBoilerSet < 80+273.15 and TBoilerSet > 20 + 273.15, "The given set point temperature is not inside the covered range (20 -> 80 degC)");
   assert(m_flowHx_scaled*kgps2lph < 1300, "The given mass flow rate is outside the allowed range. Make sure that the mass flow
   is positive and not too high. The current mass flow equals " + String(m_flowHx) + " [kg/s] but its maximum value is for the chosen QNom is " + String(1300*QNom/QNom0/kgps2lph));
-  onOff.u = modulationInit;
   onOff.release = if noEvent(m_flowHx > Modelica.Constants.eps) then 1.0 else 0.0;
   QAsked = IDEAS.Utilities.Math.Functions.smoothMax(0, m_flowHx*(Medium.specificEnthalpy(Medium.setState_pTX(Medium.p_default,TBoilerSet, Medium.X_default)) -hIn), 10);
   eta100.u1 = THxIn - 273.15;
@@ -119,6 +121,18 @@ equation
   eta = Modelica.Math.Vectors.interpolate(modVector, etaVector, modulation);
   heatPort.Q_flow = - Modelica.Math.Vectors.interpolate(modVector, QVector, modulation) - QLossesToCompensate;
   PFuel = if noEvent(modulation >0) then -heatPort.Q_flow / eta else 0;
+  connect(realExpression.y, onOff.u) annotation (Line(
+      points={{1,88},{18,88},{18,50},{26,50}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(realExpression1.y, onOff.uHigh) annotation (Line(
+      points={{1,64},{12,64},{12,46},{26,46}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(realExpression2.y, onOff.uLow) annotation (Line(
+      points={{1,42},{26,42}},
+      color={0,0,127},
+      smooth=Smooth.None));
   annotation (Diagram(graphics),
               Diagram(graphics),
     Documentation(info="<html>
