@@ -8,8 +8,6 @@ model MonoLayerOpaque "single material layer"
   parameter Modelica.SIunits.Temperature T_start=293.15
     "Start temperature for each of the states";
 
-  final parameter Boolean present = mat.d <> 0;
-
   final parameter Integer nSta=mat.nSta;
   final parameter Integer nFlo=mat.nSta + 1;
   final parameter Real R = mat.R "Total specific thermal resistance";
