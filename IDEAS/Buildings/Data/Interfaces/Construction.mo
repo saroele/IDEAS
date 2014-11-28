@@ -7,12 +7,12 @@ record Construction
     "Number of layers of the construction, including gaps";
   parameter Integer locGain(min=1) = 1 "Location of possible embedded system";
   replaceable parameter IDEAS.Buildings.Data.Interfaces.Insulation
-    insulationType(final d=insulationTickness) constrainedby
+    insulationType(final d=insulationThickness) constrainedby
     IDEAS.Buildings.Data.Interfaces.Insulation "Type of thermal insulation";
   parameter IDEAS.Buildings.Data.Interfaces.Material[nLay] mats
     "Array of materials";
-  parameter Modelica.SIunits.Length insulationTickness=0
-    "Thermal insulation thickness";
+  parameter Modelica.SIunits.Length insulationThickness( min=0.001)
+    "Thermal insulation thickness, larger than 0";
 
   annotation (Documentation(info="<html>
 <h4><span style=\"color:#008000\">General description</span></h4>

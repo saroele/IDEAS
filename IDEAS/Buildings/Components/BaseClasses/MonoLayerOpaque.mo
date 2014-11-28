@@ -27,6 +27,8 @@ public
     "Heat flow rate from state i to i+1";
 
 equation
+  assert(mat.d <> 0, "One of the materials in the construction has a thickness 
+    of zero. Either remove this material or adjust the thickness to a value larger than 0");
   // connectors
   port_a.Q_flow = +Q_flow[1];
   port_b.Q_flow = -Q_flow[nFlo];

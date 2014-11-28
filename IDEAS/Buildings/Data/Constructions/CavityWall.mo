@@ -1,6 +1,5 @@
 within IDEAS.Buildings.Data.Constructions;
-record CavityWall
-  "Example - Classic cavity wall construction with fully-filled cavity"
+record CavityWall "Example - Classic cavity wall construction with 10mm cavity"
 
   extends IDEAS.Buildings.Data.Interfaces.Construction(
     nLay=4,

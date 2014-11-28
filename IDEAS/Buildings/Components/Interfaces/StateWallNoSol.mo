@@ -10,7 +10,7 @@ partial model StateWallNoSol
     annotation (Dialog(group="Construction details"));
   replaceable IDEAS.Buildings.Data.Constructions.CavityWall constructionType
     constrainedby Data.Interfaces.Construction(final insulationType=
-        insulationType, final insulationTickness=insulationThickness)
+        insulationType, final insulationThickness=insulationThickness)
     "Type of building construction" annotation (
     __Dymola_choicesAllMatching=true,
     Placement(transformation(extent={{-38,72},{-34,76}})),
