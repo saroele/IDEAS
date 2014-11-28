@@ -21,6 +21,8 @@ model DummyBuilding "Dummy building for testing heating systems"
   Modelica.Blocks.Sources.RealExpression[nZones] TAmb_val(each y=sim.Te)
     annotation (Placement(transformation(extent={{-146,44},{-126,64}})));
   parameter Real UA_building=500 "Constant output value";
+  parameter SI.Temperature TStart[nZones]=ones(nZones)*293
+    "Temperature of element";
 equation
   connect(heatCapacitor.port, convection.solid) annotation (Line(
       points={{-50,70},{-50,54},{-62,54}},
@@ -55,10 +57,10 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   if nEmb > 0 then
-      connect(heatPortEmb, heatCapacitor.port) annotation (Line(
-        points={{150,60},{-50,60},{-50,70}},
-        color={191,0,0},
-        smooth=Smooth.None));
+  connect(heatPortEmb, heatCapacitor.port) annotation (Line(
+      points={{150,60},{-50,60},{-50,70}},
+      color={191,0,0},
+      smooth=Smooth.None));
   end if;
 
   connect(flowPort_Out, flowPort_In) annotation (Line(
