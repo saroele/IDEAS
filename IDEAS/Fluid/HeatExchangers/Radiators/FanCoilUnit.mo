@@ -69,7 +69,8 @@ public
     redeclare package Medium = Medium,
     m_flow_nominal=m_flow_nominal,
     CvData=Buildings.Fluid.Types.CvTypes.OpPoint,
-    dpValve_nominal=800)
+    dpValve_nominal=800,
+    l=0.01)
     annotation (Placement(transformation(extent={{32,10},{52,-10}})));
   Modelica.Blocks.Interfaces.RealInput TSet "Set temperature in the room, in K"
     annotation (Placement(transformation(extent={{-126,-60},{-86,-20}})));
@@ -135,9 +136,11 @@ public
   Modelica.Blocks.Math.Add forcedConvection(k1=1, k2=-1)
     annotation (Placement(transformation(extent={{18,66},{28,76}})));
   Modelica.Blocks.Sources.RealExpression posVal_expr(y=posValSet)
-    annotation (Placement(transformation(extent={{10,-44},{30,-24}})));
+    annotation (Placement(transformation(extent={{-4,-68},{16,-48}})));
   Modelica.Blocks.Sources.RealExpression mFloAir_expr(y=mFloAirSet)
     annotation (Placement(transformation(extent={{54,10},{74,30}})));
+  Modelica.Blocks.Continuous.FirstOrder firstOrder(T=10)
+    annotation (Placement(transformation(extent={{26,-45},{44,-27}})));
 equation
   connect(res.port_b, port_b) annotation (Line(
       points={{80,0},{100,0}},
@@ -147,10 +150,6 @@ equation
   connect(val.port_b, res.port_a) annotation (Line(
       points={{52,0},{60,0}},
       color={0,127,255},
-      smooth=Smooth.None));
-  connect(posVal_expr.y, val.y) annotation (Line(
-      points={{31,-34},{42,-34},{42,-12}},
-      color={0,0,127},
       smooth=Smooth.None));
   connect(TSet, add.u2) annotation (Line(
       points={{-106,-40},{-66,-40}},
@@ -224,6 +223,14 @@ equation
       points={{75,20},{92,20},{92,38},{86,38}},
       color={0,0,127},
       smooth=Smooth.None));
+  connect(posVal_expr.y, firstOrder.u) annotation (Line(
+      points={{17,-58},{20,-58},{20,-36},{24.2,-36}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(firstOrder.y, val.y) annotation (Line(
+      points={{44.9,-36},{54,-36},{54,-22},{42,-22},{42,-12}},
+      color={0,0,127},
+      smooth=Smooth.None));
   annotation (Documentation(info="<html>
 <p><b>Description</b> </p>
 <p>Simplified dynamic radiator model, not discretized, based on EN&nbsp;442-2. </p>
@@ -272,6 +279,7 @@ equation
         Rectangle(extent={{-22,-82},{0,78}},    lineColor={135,135,135}),
         Rectangle(extent={{8,-82},{30,78}},   lineColor={135,135,135}),
         Rectangle(extent={{38,-82},{60,78}},  lineColor={135,135,135})}),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
-            100}}),graphics));
+    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
+            100,100}}),
+                   graphics));
 end FanCoilUnit;
