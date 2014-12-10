@@ -7,7 +7,7 @@ record Construction
     "Number of layers of the construction, including gaps";
   parameter Integer locGain(min=1) = 1 "Location of possible embedded system";
   replaceable parameter IDEAS.Buildings.Data.Interfaces.Insulation
-    insulationType(final d=insulationThickness) constrainedby
+    insulationType(d=insulationThickness) constrainedby
     IDEAS.Buildings.Data.Interfaces.Insulation "Type of thermal insulation";
   parameter IDEAS.Buildings.Data.Interfaces.Material[nLay] mats
     "Array of materials";

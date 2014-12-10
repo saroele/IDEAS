@@ -9,14 +9,14 @@ partial model StateWallNoSol
     "Thermal insulation thickness"
     annotation (Dialog(group="Construction details"));
   replaceable IDEAS.Buildings.Data.Constructions.CavityWall constructionType
-    constrainedby Data.Interfaces.Construction(final insulationType=
-        insulationType, final insulationThickness=insulationThickness)
+    constrainedby Data.Interfaces.Construction(insulationType=
+        insulationType, insulationThickness=insulationThickness)
     "Type of building construction" annotation (
     __Dymola_choicesAllMatching=true,
     Placement(transformation(extent={{-38,72},{-34,76}})),
     Dialog(group="Construction details"));
   replaceable IDEAS.Buildings.Data.Insulation.Rockwool insulationType
-    constrainedby Data.Interfaces.Insulation(final d=insulationThickness)
+    constrainedby Data.Interfaces.Insulation(d=insulationThickness)
     "Type of thermal insulation" annotation (
     __Dymola_choicesAllMatching=true,
     Placement(transformation(extent={{-38,84},{-34,88}})),
