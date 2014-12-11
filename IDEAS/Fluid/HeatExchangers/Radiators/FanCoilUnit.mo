@@ -1,11 +1,11 @@
 within IDEAS.Fluid.HeatExchangers.Radiators;
 model FanCoilUnit
-  "Fan coil unit with air- and water mass flow control in 3 steps"
+  "Fan coil unit with air - and water mass flow control in 3 steps"
   import Buildings;
   import IDEAS;
-  extends IDEAS.Fluid.HeatExchangers.Interfaces.EmissionTwoPort;
   extends IDEAS.Fluid.Interfaces.Partials.PartialTwoPort(
-     final m=mMedium+mDry*cpDry/Medium.specificHeatCapacityCp(state_default),
+     final m=mMedium,
+     final mFactor=mDry*cpDry/(mMedium*Medium.specificHeatCapacityCp(state_default)),
      final m_flow_nominal=QNom/Medium.cp_const/(TInNom -TOutNom),
     vol(nPorts=2));
   extends IDEAS.Fluid.Interfaces.TwoPortFlowResistanceParameters(
