@@ -79,10 +79,17 @@ public
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heatPort
     "heatPort connection to water in condensor"
     annotation (Placement(transformation(extent={{90,-10},{110,10}})));
-  Controls.Discrete.Hyst_Var_Cooling      onOff(
+  Controls.Discrete.HysteresisRelease     onOff(
+    use_input=false,
+    enableRelease=true,
+    uLow_val=modulationMin,
+    uHigh_val=modulationStart,
     y(start = 0),
     enableRelease=true) "on-off, based on modulationInit"
     annotation (Placement(transformation(extent={{28,40},{48,60}})));
+    y(start=0),
+    release(start=0))
+    annotation (Placement(transformation(extent={{20,20},{40,40}})));
   Modelica.Blocks.Sources.RealExpression realExpression(y=modulationInit)
     annotation (Placement(transformation(extent={{-20,78},{0,98}})));
   Modelica.Blocks.Sources.RealExpression realExpression1(y=modulationStart)
@@ -95,25 +102,24 @@ equation
   is positive and not too high. The current mass flow equals " + String(m_flowHx) + " [kg/s] but its maximum value is for the chosen QNom is " + String(1300*QNom/QNom0/kgps2lph));
   onOff.release = if noEvent(m_flowHx > Modelica.Constants.eps) then 1.0 else 0.0;
   QAsked = IDEAS.Utilities.Math.Functions.smoothMax(0, m_flowHx*(Medium.specificEnthalpy(Medium.setState_pTX(Medium.p_default,TBoilerSet, Medium.X_default)) -hIn), 10);
-  eta100.u1 = THxIn - 273.15;
-  eta100.u2 = m_flowHx * kgps2lph;
-  eta80.u1 = THxIn - 273.15;
-  eta80.u2 = m_flowHx * kgps2lph;
-  eta60.u1 = THxIn - 273.15;
-  eta60.u2 = m_flowHx * kgps2lph;
-  eta40.u1 = THxIn - 273.15;
-  eta40.u2 = m_flowHx * kgps2lph;
-  eta20.u1 = THxIn - 273.15;
-  eta20.u2 = m_flowHx * kgps2lph;
+  eta80.u1 :=THxIn - 273.15;
+  eta80.u2 :=m_flowHx_scaled*kgps2lph;
+  eta60.u1 :=THxIn - 273.15;
+  eta60.u2 :=m_flowHx_scaled*kgps2lph;
+  eta40.u1 :=THxIn - 273.15;
+  eta40.u2 :=m_flowHx_scaled*kgps2lph;
+  eta20.u1 :=THxIn - 273.15;
+  eta20.u2 :=m_flowHx_scaled*kgps2lph;
   // all these are in kW
-  etaVector[1] = 0;
-  etaVector[2] = eta20.y;
-  etaVector[3] = eta40.y;
-  etaVector[4] = eta60.y;
-  etaVector[5] = eta80.y;
-  etaVector[6] = eta100.y;
-  QVector = etaVector / etaNom .* modVector/100 * QNom; // in W
-  QMax = QVector[6];
+  etaVector[1] :=0;
+  etaVector[2] :=eta20.y;
+  etaVector[3] :=eta40.y;
+  etaVector[4] :=eta60.y;
+  etaVector[5] :=eta80.y;
+  etaVector[6] :=eta100.y;
+  QVector :=etaVector/etaNom .* modVector/100*QNom;
+  // in W
+  QMax :=QVector[6];
   modulationInit = Modelica.Math.Vectors.interpolate(QVector, modVector, QAsked);
   modulation = onOff.y * min(modulationInit, 100);
   // compensation of heat losses (only when the hp is operating)

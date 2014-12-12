@@ -5,8 +5,7 @@ model SaturationPressure "Model to test the wet bulb temperature computation"
  package Medium = IDEAS.Media.Air "Medium model"
            annotation (choicesAllMatching = true);
 
-  IDEAS.Utilities.Psychrometrics.SaturationPressure pSat
-    "Saturation pressure"
+  IDEAS.Utilities.Psychrometrics.SaturationPressure pSat "Saturation pressure"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
   Modelica.Blocks.Sources.Ramp T(
     height=373.15 - 190,
@@ -18,10 +17,7 @@ equation
       points={{-39,0},{-11,0}},
       color={0,0,127},
       smooth=Smooth.None));
-    annotation (Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-100,
-            -100},{100,100}}),
-                        graphics),
-experiment(StopTime=1.0),
+    annotation (experiment(StopTime=1.0),
 __Dymola_Commands(file="modelica://IDEAS/Resources/Scripts/Dymola/Utilities/Psychrometrics/Examples/SaturationPressure.mos"
         "Simulate and plot"),
     Documentation(info="<html>
