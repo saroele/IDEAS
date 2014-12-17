@@ -141,6 +141,8 @@ public
     annotation (Placement(transformation(extent={{54,10},{74,30}})));
   Modelica.Blocks.Continuous.FirstOrder firstOrder(T=10)
     annotation (Placement(transformation(extent={{26,-45},{44,-27}})));
+  Modelica.Blocks.Nonlinear.Limiter limiter(uMin=0)
+    annotation (Placement(transformation(extent={{58,-41},{68,-31}})));
 equation
   connect(res.port_b, port_b) annotation (Line(
       points={{80,0},{100,0}},
@@ -227,8 +229,12 @@ equation
       points={{17,-58},{20,-58},{20,-36},{24.2,-36}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(firstOrder.y, val.y) annotation (Line(
-      points={{44.9,-36},{54,-36},{54,-22},{42,-22},{42,-12}},
+  connect(firstOrder.y, limiter.u) annotation (Line(
+      points={{44.9,-36},{57,-36}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(limiter.y, val.y) annotation (Line(
+      points={{68.5,-36},{74,-36},{74,-22},{42,-22},{42,-12}},
       color={0,0,127},
       smooth=Smooth.None));
   annotation (Documentation(info="<html>
