@@ -16,7 +16,7 @@ model FlowMachine_dp
   parameter Modelica.Blocks.Types.Init init=Modelica.Blocks.Types.Init.InitialOutput
     "Type of initialization (no init/steady state/initial state/initial output)"
     annotation(Dialog(tab="Dynamics", group="Filtered speed",enable=filteredSpeed));
-  parameter Modelica.SIunits.Pressure dp_start(min=0, displayUnit="Pa")=0
+  parameter Modelica.SIunits.Pressure dp_start(displayUnit="Pa")=0
     "Initial value of pressure raise"
     annotation(Dialog(tab="Dynamics", group="Filtered speed"));
   parameter Modelica.SIunits.Pressure dp_nominal(min=0, displayUnit="Pa")=10000
@@ -32,7 +32,7 @@ model FlowMachine_dp
         rotation=-90,
         origin={-2,120})));
 
-  Modelica.Blocks.Interfaces.RealOutput dp_actual(min=0, final unit="Pa")
+  Modelica.Blocks.Interfaces.RealOutput dp_actual(final unit="Pa")
     annotation (Placement(transformation(extent={{100,40},{120,60}}),
         iconTransformation(extent={{100,40},{120,60}})));
 
