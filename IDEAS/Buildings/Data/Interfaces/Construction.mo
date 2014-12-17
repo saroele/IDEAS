@@ -11,8 +11,8 @@ record Construction
     IDEAS.Buildings.Data.Interfaces.Insulation "Type of thermal insulation";
   parameter IDEAS.Buildings.Data.Interfaces.Material[nLay] mats
     "Array of materials";
-  parameter Modelica.SIunits.Length insulationThickness( min=0.001)
-    "Thermal insulation thickness, larger than 0";
+  parameter Modelica.SIunits.Length insulationThickness
+    "Thermal insulation thickness, cannot be smaller than 0";
 
   annotation (Documentation(info="<html>
 <h4><span style=\"color:#008000\">General description</span></h4>
