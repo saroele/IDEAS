@@ -1,60 +1,16 @@
 within IDEAS.Fluid.Production;
 model Boiler
-  "Modulating boiler with losses to environment, based on performance tables"
-  extends IDEAS.Fluid.Production.Interfaces.PartialDynamicHeaterWithLosses(
-      final heaterType=BaseClasses.HeaterType.Boiler);
-
-  Real eta "Instanteanous efficiency";
-
-  IDEAS.Fluid.Production.BaseClasses.HeatSource_CondensingGasBurner heatSource(
-    QNom=QNom,
-    TBoilerSet=TSet,
-    TEnvironment=heatPort.T,
-    UALoss=UALoss,
-    modulationMin=modulationMin,
-    modulationStart=modulationStart,
-    THxIn=Tin.T,
-    hIn=inStream(port_a.h_outflow),
-    m_flowHx=port_a.m_flow,
-    redeclare package Medium = Medium)
-    annotation (Placement(transformation(extent={{-80,20},{-60,40}})));
-  parameter Real modulationMin=25 "Minimal modulation percentage";
-  parameter Real modulationStart=35
-    "Min estimated modulation level required for start of HP";
+  "Dynamic boiler model, based on interpolation in performance tables."
+  extends BaseClasses.PartialBoiler(redeclare replaceable
+      BaseClasses.HeatSources.PerformanceMap3DHeatSource heatSource);
 equation
-  // Electricity consumption for electronics and fan only.  Pump is covered by pumpHeater;
-  // This data is taken from Viessmann VitoDens 300W, smallest model.  So only valid for
-  // very small household condensing gas boilers.
-  PEl = 7 + heatSource.modulation/100*(33 - 7);
-  PFuel = heatSource.PFuel;
-  eta = heatSource.eta;
-  connect(heatSource.heatPort, pipe_HeatPort.heatPort) annotation (Line(
-      points={{-60,30},{28,30},{28,-6}},
-      color={191,0,0},
-      smooth=Smooth.None));
+    PEl = 7 + heatSource.modulation/100*(33 - 7);
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
-            120}}),
+            100}}),
             graphics),
-    Icon(graphics={
-        Ellipse(
-          extent={{-58,60},{60,-60}},
-          lineColor={127,0,0},
-          fillPattern=FillPattern.Solid,
-          fillColor={255,255,255}),
-        Ellipse(extent={{-46,46},{48,-46}}, lineColor={95,95,95}),
-        Line(
-          points={{-30,34},{32,-34}},
-          color={95,95,95},
-          smooth=Smooth.None),
-        Line(
-          points={{100,20},{44,20}},
-          color={0,0,127},
-          smooth=Smooth.None),
-        Line(
-          points={{102,-40},{70,-40},{70,-80},{0,-80},{0,-46}},
-          color={0,0,127},
-          smooth=Smooth.None)}),
+    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
+         graphics),
     Documentation(info="<html>
 <p><h4><font color=\"#008000\">Description </font></h4></p>
 <p>Dynamic boiler model, based on interpolation in performance tables. The boiler has thermal losses to the environment which are often not mentioned in the performance tables. Therefore, the additional environmental heat losses are added to the heat production in order to ensure the same performance as in the manufacturers data, while still obtaining a dynamic model with heat losses (also when boiler is off). The heatSource will compute the required power and the environmental heat losses, and try to reach the set point. </p>
