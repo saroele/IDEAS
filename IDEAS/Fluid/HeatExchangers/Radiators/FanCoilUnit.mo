@@ -141,7 +141,7 @@ public
     annotation (Placement(transformation(extent={{54,10},{74,30}})));
   Modelica.Blocks.Continuous.FirstOrder firstOrder(T=10)
     annotation (Placement(transformation(extent={{26,-45},{44,-27}})));
-  Modelica.Blocks.Nonlinear.Limiter limiter(uMin=0)
+  Modelica.Blocks.Nonlinear.Limiter limiter(uMin=0, strict=true)
     annotation (Placement(transformation(extent={{58,-41},{68,-31}})));
 equation
   connect(res.port_b, port_b) annotation (Line(
