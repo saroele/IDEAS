@@ -143,12 +143,24 @@ public
     annotation (Placement(transformation(extent={{26,-45},{44,-27}})));
   Modelica.Blocks.Nonlinear.Limiter limiter(uMin=0, strict=true)
     annotation (Placement(transformation(extent={{58,-41},{68,-31}})));
+  Modelica.Blocks.Math.Gain GainFraConv(k=1 - fraRad)
+    "convective fraction of the heatflow"
+    annotation (Placement(transformation(extent={{44,70},{52,78}})));
+  Modelica.Blocks.Math.Gain GainFraRad(k=fraRad)
+    "Radiative part of the heat flow"
+    annotation (Placement(transformation(extent={{44,60},{52,68}})));
+  parameter Real fraRad = 0.05 annotation(Evaluate=false);
+  Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow prescribedHeatFlowRad
+    annotation (Placement(transformation(
+        extent={{-7,-7},{7,7}},
+        rotation=90,
+        origin={89,77})));
 equation
   connect(res.port_b, port_b) annotation (Line(
       points={{80,0},{100,0}},
       color={0,127,255},
       smooth=Smooth.None));
-  heatPortRad.Q_flow = 0;
+
   connect(val.port_b, res.port_a) annotation (Line(
       points={{52,0},{60,0}},
       color={0,127,255},
@@ -217,10 +229,6 @@ equation
       points={{40,57},{40,62},{10,62},{10,68},{17,68}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(forcedConvection.y, prescribedHeatFlow.Q_flow) annotation (Line(
-      points={{28.5,71},{48,71},{48,60},{63,60},{63,70}},
-      color={0,0,127},
-      smooth=Smooth.None));
   connect(mFloAir_expr.y, airFCUIn.m_flow_in) annotation (Line(
       points={{75,20},{92,20},{92,38},{86,38}},
       color={0,0,127},
@@ -236,6 +244,26 @@ equation
   connect(limiter.y, val.y) annotation (Line(
       points={{68.5,-36},{74,-36},{74,-22},{42,-22},{42,-12}},
       color={0,0,127},
+      smooth=Smooth.None));
+  connect(GainFraConv.y, prescribedHeatFlow.Q_flow) annotation (Line(
+      points={{52.4,74},{54,74},{54,66},{63,66},{63,70}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(forcedConvection.y, GainFraConv.u) annotation (Line(
+      points={{28.5,71},{40,71},{40,74},{43.2,74}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(forcedConvection.y, GainFraRad.u) annotation (Line(
+      points={{28.5,71},{40,71},{40,64},{43.2,64}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(GainFraRad.y, prescribedHeatFlowRad.Q_flow) annotation (Line(
+      points={{52.4,64},{89,64},{89,70}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(prescribedHeatFlowRad.port, heatPortRad) annotation (Line(
+      points={{89,84},{89,100},{90,100}},
+      color={191,0,0},
       smooth=Smooth.None));
   annotation (Documentation(info="<html>
 <p><b>Description</b> </p>
@@ -285,7 +313,6 @@ equation
         Rectangle(extent={{-22,-82},{0,78}},    lineColor={135,135,135}),
         Rectangle(extent={{8,-82},{30,78}},   lineColor={135,135,135}),
         Rectangle(extent={{38,-82},{60,78}},  lineColor={135,135,135})}),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
-            100,100}}),
-                   graphics));
+    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
+            100}}),graphics));
 end FanCoilUnit;
