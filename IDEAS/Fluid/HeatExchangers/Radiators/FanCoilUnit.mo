@@ -141,14 +141,15 @@ public
     annotation (Placement(transformation(extent={{54,10},{74,30}})));
   Modelica.Blocks.Continuous.FirstOrder firstOrder(T=10)
     annotation (Placement(transformation(extent={{26,-45},{44,-27}})));
-  Modelica.Blocks.Nonlinear.Limiter limiter(uMin=0)
+  Modelica.Blocks.Nonlinear.Limiter limiter(uMin=0, strict=true)
     annotation (Placement(transformation(extent={{58,-41},{68,-31}})));
+
 equation
   connect(res.port_b, port_b) annotation (Line(
       points={{80,0},{100,0}},
       color={0,127,255},
       smooth=Smooth.None));
-  heatPortRad.Q_flow = 0;
+
   connect(val.port_b, res.port_a) annotation (Line(
       points={{52,0},{60,0}},
       color={0,127,255},
@@ -217,10 +218,6 @@ equation
       points={{40,57},{40,62},{10,62},{10,68},{17,68}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(forcedConvection.y, prescribedHeatFlow.Q_flow) annotation (Line(
-      points={{28.5,71},{48,71},{48,60},{63,60},{63,70}},
-      color={0,0,127},
-      smooth=Smooth.None));
   connect(mFloAir_expr.y, airFCUIn.m_flow_in) annotation (Line(
       points={{75,20},{92,20},{92,38},{86,38}},
       color={0,0,127},
@@ -237,6 +234,11 @@ equation
       points={{68.5,-36},{74,-36},{74,-22},{42,-22},{42,-12}},
       color={0,0,127},
       smooth=Smooth.None));
+  connect(prescribedHeatFlow.Q_flow, forcedConvection.y) annotation (Line(
+      points={{63,70},{64,70},{64,64},{46,64},{46,71},{28.5,71}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  heatPortRad.Q_flow=0;
   annotation (Documentation(info="<html>
 <p><b>Description</b> </p>
 <p>Simplified dynamic radiator model, not discretized, based on EN&nbsp;442-2. </p>
@@ -285,7 +287,6 @@ equation
         Rectangle(extent={{-22,-82},{0,78}},    lineColor={135,135,135}),
         Rectangle(extent={{8,-82},{30,78}},   lineColor={135,135,135}),
         Rectangle(extent={{38,-82},{60,78}},  lineColor={135,135,135})}),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
-            100,100}}),
-                   graphics));
+    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
+            100}}),graphics));
 end FanCoilUnit;
