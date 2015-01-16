@@ -238,6 +238,7 @@ equation
       points={{63,70},{64,70},{64,64},{46,64},{46,71},{28.5,71}},
       color={0,0,127},
       smooth=Smooth.None));
+  heatPortRad.Q_flow=0;
   annotation (Documentation(info="<html>
 <p><b>Description</b> </p>
 <p>Simplified dynamic radiator model, not discretized, based on EN&nbsp;442-2. </p>
