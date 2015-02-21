@@ -58,7 +58,6 @@ partial model PartialHeatSource
     "Setpoint for net hemal power"
     annotation (Placement(transformation(extent={{-128,-60},{-88,-20}}),
         iconTransformation(extent={{-120,-52},{-96,-28}})));
-
   //Modulation parameters
   parameter Boolean avoidEvents = true
     "Set to true to switch heat pumps on using a continuous transition"
@@ -105,18 +104,15 @@ protected
     "Needed to connect to conditional connector";
   Modelica.Blocks.Interfaces.RealInput QSet_internal
     "Needed to connect to conditional connector";
-
 public
   replaceable parameter PartialData                                              data constrainedby
     PartialData
     annotation (choicesAllMatching=true, Placement(transformation(extent={{70,-88},
             {90,-68}})));
-
 equation
   // Compuation of QAsked, depends on which input is used
   connect(TSet, TSet_internal);
   connect(QSet, QSet_internal);
-
   if useTSet then
     QAsked = IDEAS.Utilities.Math.Functions.smoothMax(0, m_flow*(Medium.specificEnthalpy(Medium.setState_pTX(Medium.p_default, TSet_internal, Medium.X_default)) -hIn), 10);
     QSet_internal = 0;
@@ -124,7 +120,6 @@ equation
     QAsked = QSet_internal;
     TSet_internal = 0;
   end if;
-
   //Calculation of the modulation
   release = if noEvent(m_flow > Modelica.Constants.eps) then 0.0 else 1.0;
   modulationInit = QAsked/QMax*100;
@@ -133,8 +128,8 @@ equation
   //Calcualation of the heat powers
   QLossesToCompensate = if noEvent(modulation > Modelica.Constants.eps) then UALoss*(heatPort.T - sim.Te) else 0;
   //Final heat power of the heat source
-  heatPort.Q_flow = -eta/etaRef*modulation/100*QNom - QLossesToCompensate;
-  PFuel = if noEvent(release < 0.5) and noEvent(eta>Modelica.Constants.eps) then -heatPort.Q_flow/eta else 0;
+  heatPort.Q_flow = -modulation/100*QNom - QLossesToCompensate;
+  PFuel = if modulation > modulationMin then modulation/100*QNom/eta else 0;
   if avoidEvents then
     connect(onOff_internal_filtered,modulationRate.y);
     connect(and1.y, booleanToReal.u) annotation (Line(
